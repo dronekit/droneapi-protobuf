@@ -137,6 +137,9 @@ message LoginResponseMsg {
         
         // The server can not speak that version number of the protocol
         PROTOCOL_INCOMPATIBLE = 4;
+        
+        // A bug in the server occurred preventing login
+        SERVER_FAULT = 5; 
     }
     required ResponseCode code = 1;
     
@@ -163,6 +166,10 @@ message StartMissionMsg {
     // If true, the file will be stored for future offline viewing.  If client disconnects
     // before sending the StopMissionMsg, the value for keep that was specified in the StartMissionMsg will be used
     required bool keep = 4;
+    
+    // Client TCP connections might fail at any time.  Missions are tagged with a UUID, if the link goes down the client can resume
+    // a mission by starting a mission with the same UUID as used previously
+    optional string uuid = 5;
 }
 
 /**
