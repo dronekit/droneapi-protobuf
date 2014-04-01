@@ -142,6 +142,9 @@ message LoginResponseMsg {
     
     // If specified, server would like to show the indicated message to the user (explains the fault)
     optional ShowMsg message = 2;
+    
+    // If set, the server would like the client to call back this many msecs later
+    optional int32   callbackDelay = 3;
 }
 
 /**
