@@ -3,3 +3,10 @@ Bixler-1.1
 Bixler-2
 Iris
 
+# Some types have special meanings such as
+GCS-<appname>
+GCS-MissionPlanner
+GCS-Andropilot
+GCS-Droidplanner
+Controller-<appname>
+

@@ -208,8 +208,14 @@ message MavlinkMsg {
 }
 
 // Set the vehicle ID that corresponds to a particular sysId on a particular interface
-// GCSes should also be described to the server using this same mechanism but use the special string "GCS" as the UUID
-message SetVehicleMsg {
+// There are three special types of pseudo vehicles (mavlink senders more accurately).  They should register themselves
+// with this same mechanism.
+// * GCSes should use a vehicleType that begins with 'GCS-'
+// * Non GCS controllers of vehicles should use a vehicleType that begins with 'Controller-'
+
+// If the client would like to control vehicles from _other_ connections it can set wantPipe to true (see below for
+// documentation) 
+message SenderIdMsg {
     // The interface the gcs is using to reach this vehicle (to allow clashing sysIds on different radio links)
     required sint32 gcsInterface = 1;
 
@@ -242,6 +248,12 @@ message SetVehicleMsg {
 
     // Autopilot software version #
     optional string softwareVersion = 9;
+
+    // If present and set to true, the client would like the server to find the specified vehicleUUID on a _different_
+    // client connection and tunnel any mavlink sent on this link to/from that vehicle (translating sysIds as necessary).
+    // This pipe allows an easy mechanism for API clients to have full control of vehicles that have called into the
+    // web server.
+    optional bool wantPipe = 10;
 }
 
 // Envelope to contain all the messages. At any time, ONLY 1 of the optional fields can be used.
@@ -251,15 +263,15 @@ message Envelope {
     enum MsgCode {
         MavlinkMsgCode = 2;
 
-	LoginMsgCode = 32;
-	SetVehicleMsgCode = 33;
-	NoteMsgCode = 34;
-	StartMissionMsgCode = 35;
-	StopMissionMsgCode = 36;
+    	LoginMsgCode = 32;
+    	SenderIdMsgCode = 33;
+    	NoteMsgCode = 34;
+    	StartMissionMsgCode = 35;
+    	StopMissionMsgCode = 36;
 
-	LoginResponseMsgCode = 64;
-	ShowMsgCode = 65;
-	MissionResponseCode = 66;
+    	LoginResponseMsgCode = 64;
+    	ShowMsgCode = 65;
+    	MissionResponseCode = 66;
     }
 
     // Optional optimization: Identifies which field is filled in.  If not specified receiver will need to check each optional payload below.
@@ -270,7 +282,7 @@ message Envelope {
 
     // Client to server payloads
     optional LoginMsg login = 32;
-    optional SetVehicleMsg setVehicle = 33;
+    optional SenderIdMsg setSender = 33;
     optional NoteMsg note = 34;
     optional StartMissionMsg startMission = 35;
     optional StopMissionMsg stopMission = 36;
