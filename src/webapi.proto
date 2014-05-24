@@ -198,12 +198,15 @@ message MissionResponse {
  should respond with a PingResponseMsg
 */
 message PingMsg {
+    // A code that can be used to uniquely identify this ping
+    required sint32 nonce = 1;
 }
 
 /**
  A response to a PingMsg message.
 */
 message PingResponseMsg {
+    required sint32 nonce = 1;
 }
 
 /**
