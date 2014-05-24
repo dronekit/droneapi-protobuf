@@ -194,6 +194,19 @@ message MissionResponse {
 }
 
 /**
+ A ping message can be sent at any time from either side of the link (no login required).  The other side
+ should respond with a PingResponseMsg
+*/
+message PingMsg {
+}
+
+/**
+ A response to a PingMsg message.
+*/
+message PingResponseMsg {
+}
+
+/**
  A message sent in either direction to indicate mavlink data which was received/sent.
 */
 message MavlinkMsg {
@@ -214,7 +227,7 @@ message MavlinkMsg {
 // * Non GCS controllers of vehicles should use a vehicleType that begins with 'Controller-'
 
 // If the client would like to control vehicles from _other_ connections it can set wantPipe to true (see below for
-// documentation) 
+// documentation)
 message SenderIdMsg {
     // The interface the gcs is using to reach this vehicle (to allow clashing sysIds on different radio links)
     required sint32 gcsInterface = 1;
@@ -268,10 +281,12 @@ message Envelope {
     	NoteMsgCode = 34;
     	StartMissionMsgCode = 35;
     	StopMissionMsgCode = 36;
+        PingMsgCode = 37;
 
     	LoginResponseMsgCode = 64;
     	ShowMsgCode = 65;
     	MissionResponseCode = 66;
+        PingResponseMsgCode = 67;
     }
 
     // Optional optimization: Identifies which field is filled in.  If not specified receiver will need to check each optional payload below.
@@ -286,9 +301,11 @@ message Envelope {
     optional NoteMsg note = 34;
     optional StartMissionMsg startMission = 35;
     optional StopMissionMsg stopMission = 36;
+    optional PingMsg ping = 37;
 
     // Server to client payloads
     optional LoginResponseMsg loginResponse = 64;
     optional ShowMsg show = 65;
     optional MissionResponse missionResponse = 66;
+    optional PingResponseMsg pingResponse = 67;
 }
