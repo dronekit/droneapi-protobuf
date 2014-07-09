@@ -82,6 +82,8 @@ message LoginMsg {
     // Who can control this vehicle via the web?
     // If specified users sharing defaults will be updated
     optional AccessCode defaultControlPrivacy = 10 [default = PRIVATE];
+
+    optional string apiKey = 11;
 }
 
 /**
